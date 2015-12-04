@@ -46,7 +46,7 @@
         var attributes = {
             'triplet_data': triplet_data,
             'datatype_filter': filters,
-            'datatype_tree': "${datatype_tree}",
+            'datatype_tree': datatype_tree,
             'job2_id': "${creating_job}",
             'tool2_name': "${tool2}",
             'hda_datatype': "${hda.datatype.file_ext}"

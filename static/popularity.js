@@ -8,7 +8,7 @@ var Popularity = Backbone.View.extend({
     },
     render: function(){
         this.$el.html("Hello World");
-        console.log(this.model.get('popularity'));
+        // console.log(this.model.get('popularity'));
     },
 });
 
@@ -105,10 +105,12 @@ var PopularityModel = Backbone.Model.extend({
 
         console.log(self.datatype_tree);
 
-        Object.keys(popularity).forEach(function(key){
-            tool3_name = self.triplet_data['tool_names'][key];
+        Object.keys(popularity).forEach(function(tool3_index){
+            tool3_name = self.triplet_data['tool_names'][tool3_index];
+            // self.datatype_tree[tool3_name]
+            console.log(tool3_index, tool3_name, self.datatype_filter[self.get('hda_datatype')]);
             if (($.inArray(tool3_name, self.datatype_filter[self.get('hda_datatype')])) == -1){
-                delete(popularity[key]);
+                delete(popularity[tool3_index]);
             }
         });
 
@@ -121,7 +123,6 @@ var PopularityModel = Backbone.Model.extend({
         Object.keys(popularity).forEach(function(key){
             popularity[key] = popularity[key]/self.total;
         });
-        console.log(popularity);
         self.trigger('popularity_calculated');
     },
 });
