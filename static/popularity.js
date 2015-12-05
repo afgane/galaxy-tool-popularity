@@ -3,13 +3,20 @@ var Popularity = Backbone.View.extend({
 
     initialize: function(attributes){
         this.model = new PopularityModel(_.extend(attributes, {'view':this}));
-        this.listenTo(this.model, 'popularity_calculated', this.render);
+        this.listenTo(this.model, 'popularity_calculated', this.renderPopularity);
         this.render();
     },
     render: function(){
-        this.$el.html("Hello World");
-        // console.log(this.model.get('popularity'));
+        this.$el.html("Please wait - computing tool popularity...");
     },
+    renderPopularity: function(){
+        var self = this,
+            popularityTable = '';
+        _.each(this.model.get('popularity'), function(v, k){
+            popularityTable += self.model.get('triplet_data')['tool_names'][k] + ": " + v + "<br/>";
+        })
+        this.$el.html(popularityTable);
+    }
 });
 
 /**
@@ -100,16 +107,12 @@ var PopularityModel = Backbone.Model.extend({
         var self = this;
         popularity = this.get('popularity');
         self.triplet_data = this.get('triplet_data'); // Triplet data
-        self.datatype_filter = this.get('datatype_filter'); // {Datatype : Tool_Name} compatibility
-        self.datatype_tree = this.get('datatype_tree'); // Datatype tree with datatype hierarchy
-
-        console.log(self.datatype_tree);
-
+        self.datatype_tools = this.get('datatype_tools'); // Datatype to tools map
+        // Remove tools whose input datatype is not compatible with the current
+        // dataset datatype
         Object.keys(popularity).forEach(function(tool3_index){
             tool3_name = self.triplet_data['tool_names'][tool3_index];
-            // self.datatype_tree[tool3_name]
-            console.log(tool3_index, tool3_name, self.datatype_filter[self.get('hda_datatype')]);
-            if (($.inArray(tool3_name, self.datatype_filter[self.get('hda_datatype')])) == -1){
+            if (($.inArray(tool3_name, self.datatype_tools[self.get('hda_datatype')])) == -1){
                 delete(popularity[tool3_index]);
             }
         });
@@ -119,7 +122,6 @@ var PopularityModel = Backbone.Model.extend({
         Object.keys(popularity).forEach(function(key){
             self.total += popularity[key];
         });
-
         Object.keys(popularity).forEach(function(key){
             popularity[key] = popularity[key]/self.total;
         });
