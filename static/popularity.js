@@ -2,20 +2,22 @@ var Popularity = Backbone.View.extend({
     el: '#tools-container',
 
     initialize: function(attributes){
+        this.render();
         this.model = new PopularityModel(_.extend(attributes, {'view':this}));
         this.listenTo(this.model, 'popularity_calculated', this.renderPopularity);
-        this.render();
     },
     render: function(){
         this.$el.html("Please wait - computing tool popularity...");
     },
     renderPopularity: function(){
-        var self = this,
-            popularityTable = '';
+        var self = this;
+        pop_table = "<table><tr><th>Popularity</th><th>Tool name</th></tr>";
         _.each(this.model.get('popularity'), function(v, k){
-            popularityTable += self.model.get('triplet_data')['tool_names'][k] + ": " + v + "<br/>";
-        })
-        this.$el.html(popularityTable);
+            pop_table += ("<tr><td>" + (v*100).toFixed(2) + "%</td><td>" +
+                self.model.get('triplet_data')['tool_names'][k] + "</tr>");
+        });
+        pop_table += "</table>";
+        this.$el.html(pop_table);
     }
 });
 
