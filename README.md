@@ -4,7 +4,7 @@ Galaxy Tool Popularity is a Galaxy add-on that supplies popularity of
 tools to use on a given dataset. The popularity calculation is determined on two
 most recent tools used to generate the chosen dataset and it is based on the
 usage of Galaxy server available at [usegalaxy.org](https://usegalaxy.org) from
-2005 until 2105.
+2005 until 2015.
 
 To install this add-on, clone this repository into
 `$GALAXY_HOME/config/plugins/visualization/<REPOSITORY>` and restart the Galaxy
