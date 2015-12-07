@@ -11,13 +11,18 @@ var Popularity = Backbone.View.extend({
     },
     renderPopularity: function(){
         var self = this;
-        pop_table = "<table><tr><th>Popularity</th><th>Tool name</th></tr>";
+        pop_table = "<table id='pop_table' class='tablesorter'><thead><tr>" +
+            "<th>Popularity</th><th>Tool name</th></tr></thead><tbody>";
         _.each(this.model.get('popularity'), function(v, k){
-            pop_table += ("<tr><td>" + (v*100).toFixed(2) + "%</td><td>" +
+            pop_table += ("<tr><td width='90px'>" + (v*100).toFixed(2) + "%</td><td>" +
                 self.model.get('triplet_data')['tool_names'][k] + "</tr>");
         });
-        pop_table += "</table>";
-        this.$el.html(pop_table);
+        pop_table += "</tbody></table>";
+        self.$el.html(pop_table)
+                              $(function(){
+            // sort on the first column, order descending
+            $('.tablesorter').tablesorter({sortList: [[0,1]]});
+        });
     }
 });
 

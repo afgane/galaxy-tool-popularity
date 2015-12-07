@@ -15,16 +15,19 @@
 <head>
     <title>${ title }</title>
     ${h.css( 'base' )}
+    ${h.stylesheet_link( '/plugins/visualizations/popularity/static/tablesorter/style.css' )}
 
     ${h.js( 'libs/jquery/jquery',
             'libs/underscore',
             'libs/backbone/backbone',
             'libs/require'
     )}
+
     <script type="text/javascript" src="/plugins/visualizations/popularity/static/popularity.js"></script>
     <script type="text/javascript" src="/plugins/visualizations/popularity/static/triplets.json"></script>
     <script type="text/javascript" src="/plugins/visualizations/popularity/static/datatype_filter.json"></script>
     <script type="text/javascript" src="/plugins/visualizations/popularity/static/datatype_tools.json"></script>
+    <script type="text/javascript" src="/plugins/visualizations/popularity/static/tablesorter/jquery.tablesorter.min.js"></script>
 </head>
 
 <body>
