@@ -5,6 +5,7 @@ var Popularity = Backbone.View.extend({
         this.render();
         this.model = new PopularityModel(_.extend(attributes, {'view':this}));
         this.listenTo(this.model, 'popularity_calculated', this.renderPopularity);
+        this.listenTo(this.model, 'data_error', this.renderError);
     },
     render: function(){
         this.$el.html("Please wait - computing tool popularity...");
@@ -18,11 +19,17 @@ var Popularity = Backbone.View.extend({
                 self.model.get('triplet_data')['tool_names'][k] + "</tr>");
         });
         pop_table += "</tbody></table>";
-        self.$el.html(pop_table)
-                              $(function(){
+        self.$el.html(pop_table);
+        $(function(){
             // sort on the first column, order descending
             $('.tablesorter').tablesorter({sortList: [[0,1]]});
         });
+    },
+    renderError: function(){
+        var self = this;
+        msg = self.model.get('error_message');
+        console.log(msg);
+        self.$el.html("<div class='error'>" + msg + "</div>");
     }
 });
 
@@ -44,24 +51,28 @@ var PopularityModel = Backbone.Model.extend({
     getToolList: function(){
         var self = this,
             tool1s = this.get('tool1s'),
-            expected_tools = this.get('expected_tools');
-        var job2Info = $.ajax( '/api/jobs/' + this.get('job2_id') );
+            expected_tools = this.get('expected_tools'),
+            job2Info = $.ajax( '/api/jobs/' + this.get('job2_id') );
         job2Info.done( function( response ) {
             job2Inputs = response.inputs;
-            self.set('expected_tools',Object.keys(job2Inputs).length);
-
-            // Look for ID(s) of job(s) preceeding this dataset's job
-            _.each(job2Inputs, function( v, k ) {
-                $.ajax( '/api/datasets/' + v.id )
-                    .done( function(response){
-                        hda_hash = response;
-                        $.ajax( '/api/jobs/' + hda_hash.creating_job )
-                            .done( function(response){
-                                tool1s.push( response.tool_id );
-                                self.trigger('tool1s_updated');
-                        })
-                })
-            });
+            self.set('expected_tools', Object.keys(job2Inputs).length);
+            if ($.isEmptyObject(job2Inputs)){
+                self.set({'error_message': "Error retrieving job history for this dataset, which is necessary for tool predictions."});
+                self.trigger('data_error');
+            } else {
+                // Look for ID(s) of job(s) preceeding this dataset's job
+                _.each(job2Inputs, function( v, k ) {
+                    $.ajax( '/api/datasets/' + v.id )
+                        .done( function(response){
+                            hda_hash = response;
+                            $.ajax( '/api/jobs/' + hda_hash.creating_job )
+                                .done( function(response){
+                                    tool1s.push( response.tool_id );
+                                    self.trigger('tool1s_updated');
+                            })
+                    })
+                });
+            }
         });
     },
 
