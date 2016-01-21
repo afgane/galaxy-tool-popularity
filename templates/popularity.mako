@@ -6,6 +6,10 @@
     creating_job = trans.security.encode_id( hda.creating_job.id )
     creating_job_id = hda.creating_job.id
     tool2 = hda.creating_job.tool_id
+    if hasattr(hda.datatype, 'file_ext'):
+        file_ext = hda.datatype.file_ext
+    else:
+        file_ext = None
 
     # Use root for resource loading.
     root = h.url_for( '/' )
@@ -47,7 +51,7 @@
             'datatype_tools': datatype_tools,
             'job2_id': "${creating_job}",
             'tool2_name': "${tool2}",
-            'hda_datatype': "${hda.datatype.file_ext}"
+            'hda_datatype': "${file_ext}"
         };
         window.view = new Popularity(attributes);
     </script>
