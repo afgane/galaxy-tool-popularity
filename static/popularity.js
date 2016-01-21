@@ -28,7 +28,6 @@ var Popularity = Backbone.View.extend({
     renderError: function(){
         var self = this;
         msg = self.model.get('error_message');
-        console.log(msg);
         self.$el.html("<div class='error'>" + msg + "</div>");
     }
 });
