@@ -9,7 +9,7 @@ usage of Galaxy server available at [usegalaxy.org](https://usegalaxy.org) from
 To install this add-on, clone this repository into
 `$GALAXY_HOME/config/plugins/visualization/popularity` with
 
-    cd $GALAXY_HOME/config/plugins/visualization
+    cd $GALAXY_HOME/config/plugins/visualizations
     git clone https://github.com/galaxyguardians/galaxy-tool-popularity.git popularity
 
 Then restart the Galaxy server process and the add-on will become available
