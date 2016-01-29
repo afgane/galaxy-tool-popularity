@@ -23,7 +23,7 @@
 
     ${h.js( 'libs/jquery/jquery',
             'libs/underscore',
-            'libs/backbone/backbone',
+            'libs/backbone',
             'libs/require'
     )}
 
